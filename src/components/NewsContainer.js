@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import Card from './Card'
 
+//! This is second tutorial
+
+
 export class NewsContainer extends Component {
 
   // Here we are storing all the object arrays in article variable 
