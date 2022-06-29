@@ -1,25 +1,25 @@
-import logo from './logo.svg';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+import React, { Component } from 'react' // for class component
+import NavBar from './components/NavBar';
+import NewsContainer from './components/NewsContainer';
+
+// Here we are creating a basic class based component using the snippet "rcc"
+
+export default class App extends Component {
+  // We can also create a class variable and use it in the component using "this.variableName"
+  name = "Holden"
+  render() {
+    return (
+     <>
+     <NavBar/>
+     <div>This is the first class based Component {this.name}</div>
+     <NewsContainer/>
+     </>
+    )
+  }
 }
 
-export default App;
+
+
