@@ -11,7 +11,6 @@ export default class App extends Component {
   render() {
     return (
      <>
-     {/* Here we are rendering both the components in web page */}
      <NavBar/>
      <NewsContainer/>
      </>
