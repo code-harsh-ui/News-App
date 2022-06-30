@@ -3,9 +3,6 @@ import Card from './Card'
 
 export class NewsContainer extends Component {
 
-  // Here we are storing all the object arrays in article variable 
-  // In class component we don't require to use let or const to declare a variable
-
      localArticle = [
       {
         "source": {
