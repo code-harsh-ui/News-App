@@ -76,26 +76,17 @@ export class NewsContainer extends Component {
         <div className="container my-3">
           <h1>Top Headlines</h1>
           <div className="row">
-            {/* //! We can also use maps to iterate all the article variable object */}
-            {/* //! In react we can return the "component" directly it will render the card "component" in the webpage we dont require to store it in variable like we do in javascript */}
+          {/* Instead of using localArticle here we are using state variable which we defined in constructor  */}
             {this.state.newsData.map(function (element) {
-
-              //?---------------- Returning Card Component Here -----------------------------
-              // In react if we create a duplicate element we must pass an attribute "key" to uniquely identify that element otherwise it will throw an error here we have a url,title, urlToImage which is different in each element, normally "key" used in array while we are looping thorugh it.
-              // And one important thing is we can't pass "key" as a props to any component
               return <div key={element.url} className="col-md-4">
-                {/* Here we have used ternary operator to prevent "slice" from "null" values it means if the element.title or element.description is have no value means null then execute the else part otherwise render the title and description with slicing */}
                 <Card
-
                   title={element.title ? element.title.slice(0, 50) : "Nothing to show"}
                   description={element.description ? element.description.slice(0, 170) : "Nothing to show"}
-                  //? here we've used ! not of operator
                   imgUrl={!element.urlToImage ? 'https://pbs.twimg.com/profile_images/1108430392267280389/ufmFwzIn_400x400.png' : element.urlToImage} newsUrl={element.url}
 
                 />
               </div>
             })}
-            {/* //?------------------------ Card Component End ----------------------------- */}
           </div>
         </div>
       </>
