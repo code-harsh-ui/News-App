@@ -8,6 +8,7 @@ import React, { Component } from 'react' // for class component
 export default class App extends Component {
   // We can also create a class variable and use it in the component using "this.variableName"
   name = "Holden"
+  // render is a react life cycle method which is used to render the html in the webpage
   render() {
     return (
      <>
