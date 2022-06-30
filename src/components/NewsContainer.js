@@ -28,7 +28,7 @@ export class NewsContainer extends Component {
   // It is must convert a function to async when we are fetching an api
   handleNextClick = async() => {
     console.log('next')
-    // When we click on next button we are adding page = 1+1 in url to fetch the next page
+    // When we click on next button we are adding page = 1+1 in url to fetch the next page 
     //! As we know the intial value of this.state.page is 1 which we have defined in useState and here we are updating the url by adding 1 to fetch the second page e.g 1+1 = 2 when we click on next button this function will execute
     let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=cfe6186e249941bab158966357415194&page=${this.state.page + 1}&pageSize=18`
     let data = await fetch(url)
