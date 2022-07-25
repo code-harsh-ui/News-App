@@ -10,8 +10,8 @@ export default class App extends Component {
     return (
      <>
      <NavBar/>
-     {/* Here we are sending props to NewsContainer component to set page size as we know pageSize allows to show a desired number of items in the webpage fetched from an api */}
-     <NewsContainer pageSize = {3}/>
+     {/* //! Here we have used propTypes and defaultProps in NewsContainer component file that is why we have'nt used or passed any props here */}
+     <NewsContainer/>
      </>
     )
   }
