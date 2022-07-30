@@ -6,7 +6,6 @@ import PropTypes from 'prop-types'
 
 export class NewsContainer extends Component {
 
-  // If there is no props passed in NewsContainer component this default props being used for the component
   static defaultProps = {
     country: 'in',
     pageSize: 9,
@@ -77,7 +76,8 @@ export class NewsContainer extends Component {
       return (
         <>
           <div className="container my-3">
-            <h1 className='text-center'>Top Headlines</h1>
+            {/* Here we get the props from App.js file with the help of this we can change headlines dynamically for each categories */}
+            <h1 className='text-center'>{this.props.head}</h1>
             <div className="row">
 
               {this.state.newsData.map(function (element) {
@@ -88,12 +88,21 @@ export class NewsContainer extends Component {
                     //? here we've used ! not of operator
                     imgUrl={!element.urlToImage ? 'https://pbs.twimg.com/profile_images/1108430392267280389/ufmFwzIn_400x400.png' : element.urlToImage} newsUrl={element.url}
 
+                    /* //!  As we know we are getting this date in string format to change this string into date object we can use new Date() object to method so that we can use all methods of date object like stringVar.getDate(), stringVar.getSeconds, stringVar.toGMTString() - this helps to change the format of date from "UTC" to "GMT" and here we have used this same method to change the date from "ISO String" to "GMT" */
+                    // And here we have passed two props from api element "publishedAt" and "author"
+                    publishedAt={new Date(element.publishedAt).toGMTString()}
+
+                    // Here we used ternary operator to state that if author is defined then "place the author name from api" and if author is not defined the use this value "unknown"
+                    author={element.author ? element.author : 'unknown'}
+
+                    // we have also passed a prop to card component from api
+                    source = {element.source.name}
+
                   />
                 </div>
               })}
 
               <div className="container d-flex justify-content-between">
-
                 <button disabled={this.state.page <= 1} type='button' className='btn btn-dark' onClick={this.handlePreviousClick}>&larr; Previous</button>
                 <button disabled={this.state.page + 1 > Math.ceil(this.state.totalResults / this.props.pageSize)} type='button' className='btn btn-dark' onClick={this.handleNextClick}>Next &rarr;</button>
               </div>
