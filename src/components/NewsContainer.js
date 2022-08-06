@@ -5,7 +5,6 @@ import PropTypes from 'prop-types'
 
 
 export class NewsContainer extends Component {
-
   static defaultProps = {
     country: 'in',
     pageSize: 9,
@@ -18,6 +17,7 @@ export class NewsContainer extends Component {
     category: PropTypes.string
   }
 
+  // to check the code flow of async await we created another object in states named "demo"
 
   constructor() {
     super();
@@ -25,12 +25,28 @@ export class NewsContainer extends Component {
       newsData: [],
       loading: false,
       page: 1,
-      totalResults: 1
+      totalResults: 1,
+      demo: 1
     }
   }
 
-  async componentDidMount() {
-    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=cfe6186e249941bab158966357415194&page=1&pageSize=${this.props.pageSize}`
+  // And to replicate the "updateNews" function we have created a function named demo1
+  async demo1() {
+    console.log(this.state.demo)
+  }
+
+  // And the third replication is "demoFun" function of handleNextClick 
+  // here we used async await method so that "demo1()" function will not called until the "this.setState" method will not set the "demo" value from 1 to 2
+  demoFun = async () => {
+    await this.setState({ demo: 2 })
+    // because of async behaviour we get the update value of "demo" which is 2 in console
+    this.demo1();
+  }
+
+  //! We are creating this function to fetch api and updating the values of states and with the help of this function we do not requrire to fetch the api again and again like we did previously in componentDidMount, handleNextClick and handlePreviousClick we just need to call this "update" function to fetch the Api from url
+
+  async updateNews() {
+    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=cfe6186e249941bab158966357415194&page=${this.state.page}&pageSize=${this.props.pageSize}`
     this.setState({ loading: true })
     let data = await fetch(url)
     let parsedData = await data.json()
@@ -43,29 +59,22 @@ export class NewsContainer extends Component {
     )
   }
 
+  async componentDidMount() {
+    this.updateNews()
+  }
+
   handleNextClick = async () => {
-    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=cfe6186e249941bab158966357415194&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`
-    this.setState({ loading: true })
-    let data = await fetch(url)
-    let parsedData = await data.json()
-    this.setState({
-      page: this.state.page + 1,
-      newsData: parsedData.articles,
-      loading: false
-    })
+    // here we have used await it means as we know "if we update the values in state the updated value will not show up console" that is why we used await here so that first it will update the "page value" only then it will call the "updateNews" function
+    await this.setState({ page: this.state.page + 1 })
+    this.updateNews();
+    console.log(this.state.page)
   }
 
 
   handlePreviousClick = async () => {
-    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=cfe6186e249941bab158966357415194&page=${this.state.page - 1}&pageSize=${this.props.pageSize}`
-    this.setState({ loading: true })
-    let data = await fetch(url)
-    let parsedData = await data.json()
-    this.setState({
-      page: this.state.page - 1,
-      newsData: parsedData.articles,
-      loading: false
-    })
+    await this.setState({ page: this.state.page - 1 })
+    this.updateNews();
+
   }
 
   render() {
@@ -76,7 +85,6 @@ export class NewsContainer extends Component {
       return (
         <>
           <div className="container my-3">
-            {/* Here we get the props from App.js file with the help of this we can change headlines dynamically for each categories */}
             <h1 className='text-center'>{this.props.head}</h1>
             <div className="row">
 
@@ -87,16 +95,9 @@ export class NewsContainer extends Component {
                     description={element.description ? element.description.slice(0, 170) : "Nothing to show"}
                     //? here we've used ! not of operator
                     imgUrl={!element.urlToImage ? 'https://pbs.twimg.com/profile_images/1108430392267280389/ufmFwzIn_400x400.png' : element.urlToImage} newsUrl={element.url}
-
-                    /* //!  As we know we are getting this date in string format to change this string into date object we can use new Date() object to method so that we can use all methods of date object like stringVar.getDate(), stringVar.getSeconds, stringVar.toGMTString() - this helps to change the format of date from "UTC" to "GMT" and here we have used this same method to change the date from "ISO String" to "GMT" */
-                    // And here we have passed two props from api element "publishedAt" and "author"
                     publishedAt={new Date(element.publishedAt).toGMTString()}
-
-                    // Here we used ternary operator to state that if author is defined then "place the author name from api" and if author is not defined the use this value "unknown"
                     author={element.author ? element.author : 'unknown'}
-
-                    // we have also passed a prop to card component from api
-                    source = {element.source.name}
+                    source={element.source.name}
 
                   />
                 </div>
@@ -105,8 +106,10 @@ export class NewsContainer extends Component {
               <div className="container d-flex justify-content-between">
                 <button disabled={this.state.page <= 1} type='button' className='btn btn-dark' onClick={this.handlePreviousClick}>&larr; Previous</button>
                 <button disabled={this.state.page + 1 > Math.ceil(this.state.totalResults / this.props.pageSize)} type='button' className='btn btn-dark' onClick={this.handleNextClick}>Next &rarr;</button>
+                {/* And here we have the test function "demoFun" which we created to under the flow of async await */} 
+                <p>{this.state.demo}</p>
+                <button onClick={this.demoFun}>click to change</button>
               </div>
-
             </div>
           </div>
         </>

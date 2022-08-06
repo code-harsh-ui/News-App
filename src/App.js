@@ -1,6 +1,4 @@
 import './App.css';
-
-
 import React, { Component } from 'react'
 import NavBar from './components/NavBar';
 import NewsContainer from './components/NewsContainer';
@@ -19,7 +17,6 @@ export default class App extends Component {
       <>
         <Router>
           <NavBar />
-          {/* Here we have passed another props "head" in NewsContainer Component so that we can change Headlines for each category of news */}
           <Routes>
             <Route path="/"
               element={<NewsContainer key='general' category='general' head='Top Headlines'/>}
