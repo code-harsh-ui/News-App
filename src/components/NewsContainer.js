@@ -3,7 +3,6 @@ import Card from './Card'
 import Spinner from './Spinner'
 import PropTypes from 'prop-types'
 
-
 export class NewsContainer extends Component {
   static defaultProps = {
     country: 'in',
@@ -17,33 +16,33 @@ export class NewsContainer extends Component {
     category: PropTypes.string
   }
 
-  // to check the code flow of async await we created another object in states named "demo"
+  // Here we have create this function to capitalize the first letter and this function being called in constructor and render for capital heading
+  capitalizeFirstLetter =(string)=>{
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       newsData: [],
       loading: false,
       page: 1,
       totalResults: 1,
-      demo: 1
     }
-  }
 
-  // And to replicate the "updateNews" function we have created a function named demo1
-  async demo1() {
-    console.log(this.state.demo)
-  }
+    // as we know in class based component we use constructor to define the "states" with its initail values
+    // Here we are grabbing the title of the webpage using "document.title" and changing it dynamically using props which is coming from App.js file
 
-  // And the third replication is "demoFun" function of handleNextClick 
-  // here we used async await method so that "demo1()" function will not called until the "this.setState" method will not set the "demo" value from 1 to 2
-  demoFun = async () => {
-    await this.setState({ demo: 2 })
-    // because of async behaviour we get the update value of "demo" which is 2 in console
-    this.demo1();
-  }
+    // document.title = this.props.head
 
-  //! We are creating this function to fetch api and updating the values of states and with the help of this function we do not requrire to fetch the api again and again like we did previously in componentDidMount, handleNextClick and handlePreviousClick we just need to call this "update" function to fetch the Api from url
+    // or 
+    
+    // we can use "category" props to set title but we need to capitazile the "category" props as well we can also set categories to capital letter manually by pass another props "head" in "App.js" file but the props "category" are also used in "api url query" that is why we used "capitalize function" to make webpage title first letter capital
+
+    // here we are calling capitalizeFirstLetter function using "this" keyword and passing this props "category" as an argument to that function.
+
+    document.title = `${this.capitalizeFirstLetter(this.props.category)} - NewsMonkey`
+  }
 
   async updateNews() {
     let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=cfe6186e249941bab158966357415194&page=${this.state.page}&pageSize=${this.props.pageSize}`
@@ -64,7 +63,6 @@ export class NewsContainer extends Component {
   }
 
   handleNextClick = async () => {
-    // here we have used await it means as we know "if we update the values in state the updated value will not show up console" that is why we used await here so that first it will update the "page value" only then it will call the "updateNews" function
     await this.setState({ page: this.state.page + 1 })
     this.updateNews();
     console.log(this.state.page)
@@ -74,7 +72,6 @@ export class NewsContainer extends Component {
   handlePreviousClick = async () => {
     await this.setState({ page: this.state.page - 1 })
     this.updateNews();
-
   }
 
   render() {
@@ -85,7 +82,8 @@ export class NewsContainer extends Component {
       return (
         <>
           <div className="container my-3">
-            <h1 className='text-center'>{this.props.head}</h1>
+            {/* <h1 className='text-center'>{this.props.head}</h1> */}
+            <h1 className='text-center'>NewsMonkey - {this.capitalizeFirstLetter(this.props.category)}</h1>
             <div className="row">
 
               {this.state.newsData.map(function (element) {
@@ -98,7 +96,6 @@ export class NewsContainer extends Component {
                     publishedAt={new Date(element.publishedAt).toGMTString()}
                     author={element.author ? element.author : 'unknown'}
                     source={element.source.name}
-
                   />
                 </div>
               })}
@@ -106,9 +103,6 @@ export class NewsContainer extends Component {
               <div className="container d-flex justify-content-between">
                 <button disabled={this.state.page <= 1} type='button' className='btn btn-dark' onClick={this.handlePreviousClick}>&larr; Previous</button>
                 <button disabled={this.state.page + 1 > Math.ceil(this.state.totalResults / this.props.pageSize)} type='button' className='btn btn-dark' onClick={this.handleNextClick}>Next &rarr;</button>
-                {/* And here we have the test function "demoFun" which we created to under the flow of async await */} 
-                <p>{this.state.demo}</p>
-                <button onClick={this.demoFun}>click to change</button>
               </div>
             </div>
           </div>
