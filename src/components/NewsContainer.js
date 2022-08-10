@@ -16,7 +16,7 @@ export class NewsContainer extends Component {
     category: PropTypes.string
   }
 
-  // Here we have create this function to capitalize the first letter and this function being called in constructor and render for capital heading
+  // Here we have created this function to capitalize the first letter and this function being called in constructor and render for capital heading
   capitalizeFirstLetter =(string)=>{
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
