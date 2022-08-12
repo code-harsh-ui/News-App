@@ -16,8 +16,7 @@ export class NewsContainer extends Component {
     category: PropTypes.string
   }
 
-  // Here we have created this function to capitalize the first letter and this function being called in constructor and render for capital heading
-  capitalizeFirstLetter =(string)=>{
+  capitalizeFirstLetter = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
@@ -29,18 +28,6 @@ export class NewsContainer extends Component {
       page: 1,
       totalResults: 1,
     }
-
-    // as we know in class based component we use constructor to define the "states" with its initail values
-    // Here we are grabbing the title of the webpage using "document.title" and changing it dynamically using props which is coming from App.js file
-
-    // document.title = this.props.head
-
-    // or 
-    
-    // we can use "category" props to set title but we need to capitazile the "category" props as well we can also set categories to capital letter manually by pass another props "head" in "App.js" file but the props "category" are also used in "api url query" that is why we used "capitalize function" to make webpage title first letter capital
-
-    // here we are calling capitalizeFirstLetter function using "this" keyword and passing this props "category" as an argument to that function.
-
     document.title = `${this.capitalizeFirstLetter(this.props.category)} - NewsMonkey`
   }
 
@@ -82,7 +69,6 @@ export class NewsContainer extends Component {
       return (
         <>
           <div className="container my-3">
-            {/* <h1 className='text-center'>{this.props.head}</h1> */}
             <h1 className='text-center'>NewsMonkey - {this.capitalizeFirstLetter(this.props.category)}</h1>
             <div className="row">
 
