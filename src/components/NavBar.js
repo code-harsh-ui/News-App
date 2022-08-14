@@ -7,7 +7,7 @@ export class NavBar extends Component {
     render() {
         return (
             <>
-                <nav className="navbar navbar-expand-lg bg-light">
+                <nav style={{width:'100%', zIndex: '1'}} className="navbar navbar-expand-lg bg-light position-fixed">
                     <div className="container-fluid">
                         <Link className="navbar-brand" to="/">News Monkey</Link>
                         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">

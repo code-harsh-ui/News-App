@@ -3,6 +3,12 @@ import Card from './Card'
 import Spinner from './Spinner'
 import PropTypes from 'prop-types'
 
+//? To use infinite scroll first we need to instal npm package 
+//! npm i react-infinite-scroll-component 
+// then we need to import the component from react-infinite-scroll-component
+import InfiniteScroll from "react-infinite-scroll-component";
+
+
 export class NewsContainer extends Component {
   static defaultProps = {
     country: 'in',
@@ -31,6 +37,8 @@ export class NewsContainer extends Component {
     document.title = `${this.capitalizeFirstLetter(this.props.category)} - NewsMonkey`
   }
 
+
+
   async updateNews() {
     let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=cfe6186e249941bab158966357415194&page=${this.state.page}&pageSize=${this.props.pageSize}`
     this.setState({ loading: true })
@@ -43,41 +51,54 @@ export class NewsContainer extends Component {
         loading: false
       }
     )
+    // console.log(this.state.newsData.length) // 9 because pageSize is 9
+    // console.log(this.state.totalResults) // 9 because pageSize is 9
   }
 
   async componentDidMount() {
     this.updateNews()
   }
 
-  handleNextClick = async () => {
-    await this.setState({ page: this.state.page + 1 })
-    this.updateNews();
-    console.log(this.state.page)
-  }
+  // This fetchMoreData function being called in infiniteScroll component and in this function we are concating the more data
 
+  fetchMoreData = async () => {
+    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=cfe6186e249941bab158966357415194&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`
+    let data = await fetch(url)
+    let parsedData = await data.json()
+    this.setState(
+      {
+        //! Here we are adding the next data in previous data using concat method
+        newsData: this.state.newsData.concat(parsedData.articles),
+        totalResults: parsedData.totalResults,
+        page: this.state.page + 1
+      }
+    )
 
-  handlePreviousClick = async () => {
-    await this.setState({ page: this.state.page - 1 })
-    this.updateNews();
+    // console.log(this.state.newsData.length) 
   }
 
   render() {
-    if (this.state.loading === true) {
-      return <Spinner />
-    }
-    else {
-      return (
-        <>
-          <div className="container my-3">
-            <h1 className='text-center'>NewsMonkey - {this.capitalizeFirstLetter(this.props.category)}</h1>
+    return (
+      <>
+        <h1 className='text-center'>NewsMonkey - {this.capitalizeFirstLetter(this.props.category)}</h1>
+        {/* Here we have used infiniteScroll component which is get from npm package */}
+        <InfiniteScroll
+          dataLength={this.state.newsData.length}
+          next={this.fetchMoreData}
+          // this condition state that if the newsData length is not equal to totalResults then return "true" or else "false"
+          // And if this props "hasMore" contains "true" it means it have more data left
+          hasMore={this.state.newsData.length !== this.state.totalResults}
+          // Here we are using our "spinner" component in loader
+          loader={< Spinner />}
+        >
+          <div className="container">
             <div className="row">
-
-              {this.state.newsData.map(function (element) {
-                return <div key={element.url} className="col-md-4">
+              {/* Here we are using second parameter to the "key" property uniquely */}
+              {this.state.newsData.map(function (element, index) {
+                return <div key={index} className="col-md-4">
                   <Card
                     title={element.title ? element.title.slice(0, 50) : "Nothing to show"}
                     description={element.description ? element.description.slice(0, 170) : "Nothing to show"}
-                    //? here we've used ! not of operator
                     imgUrl={!element.urlToImage ? 'https://pbs.twimg.com/profile_images/1108430392267280389/ufmFwzIn_400x400.png' : element.urlToImage} newsUrl={element.url}
                     publishedAt={new Date(element.publishedAt).toGMTString()}
                     author={element.author ? element.author : 'unknown'}
@@ -85,16 +106,11 @@ export class NewsContainer extends Component {
                   />
                 </div>
               })}
-
-              <div className="container d-flex justify-content-between">
-                <button disabled={this.state.page <= 1} type='button' className='btn btn-dark' onClick={this.handlePreviousClick}>&larr; Previous</button>
-                <button disabled={this.state.page + 1 > Math.ceil(this.state.totalResults / this.props.pageSize)} type='button' className='btn btn-dark' onClick={this.handleNextClick}>Next &rarr;</button>
-              </div>
             </div>
           </div>
-        </>
-      )
-    }
+        </InfiniteScroll>
+      </>
+    )
   }
 }
 
