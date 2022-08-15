@@ -3,9 +3,7 @@ import Card from './Card'
 import Spinner from './Spinner'
 import PropTypes from 'prop-types'
 
-//? To use infinite scroll first we need to instal npm package 
-//! npm i react-infinite-scroll-component 
-// then we need to import the component from react-infinite-scroll-component
+//! it is important to import infiniteScroll component here so we can use the props which we are fetching from App.js file
 import InfiniteScroll from "react-infinite-scroll-component";
 
 
@@ -26,6 +24,7 @@ export class NewsContainer extends Component {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
+  // Here we are passing props to the constructor and super because we need to use props in document.title
   constructor(props) {
     super(props);
     this.state = {
@@ -37,13 +36,14 @@ export class NewsContainer extends Component {
     document.title = `${this.capitalizeFirstLetter(this.props.category)} - NewsMonkey`
   }
 
-
-
-  async updateNews() {
+  async componentDidMount() {
+    //! Here we are calling the function "setProgress" which the help of props "progressProp" which we passed in NewsContainer component from App.js file to this file
+    this.props.progressProp(30)
     let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=cfe6186e249941bab158966357415194&page=${this.state.page}&pageSize=${this.props.pageSize}`
     this.setState({ loading: true })
     let data = await fetch(url)
     let parsedData = await data.json()
+    this.props.progressProp(70)
     this.setState(
       {
         newsData: parsedData.articles,
@@ -51,15 +51,10 @@ export class NewsContainer extends Component {
         loading: false
       }
     )
-    // console.log(this.state.newsData.length) // 9 because pageSize is 9
-    // console.log(this.state.totalResults) // 9 because pageSize is 9
+    this.props.progressProp(100)
+
   }
 
-  async componentDidMount() {
-    this.updateNews()
-  }
-
-  // This fetchMoreData function being called in infiniteScroll component and in this function we are concating the more data
 
   fetchMoreData = async () => {
     let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=cfe6186e249941bab158966357415194&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`
@@ -67,33 +62,25 @@ export class NewsContainer extends Component {
     let parsedData = await data.json()
     this.setState(
       {
-        //! Here we are adding the next data in previous data using concat method
         newsData: this.state.newsData.concat(parsedData.articles),
         totalResults: parsedData.totalResults,
         page: this.state.page + 1
       }
     )
-
-    // console.log(this.state.newsData.length) 
   }
 
   render() {
     return (
       <>
         <h1 className='text-center'>NewsMonkey - {this.capitalizeFirstLetter(this.props.category)}</h1>
-        {/* Here we have used infiniteScroll component which is get from npm package */}
         <InfiniteScroll
           dataLength={this.state.newsData.length}
           next={this.fetchMoreData}
-          // this condition state that if the newsData length is not equal to totalResults then return "true" or else "false"
-          // And if this props "hasMore" contains "true" it means it have more data left
           hasMore={this.state.newsData.length !== this.state.totalResults}
-          // Here we are using our "spinner" component in loader
           loader={< Spinner />}
         >
           <div className="container">
             <div className="row">
-              {/* Here we are using second parameter to the "key" property uniquely */}
               {this.state.newsData.map(function (element, index) {
                 return <div key={index} className="col-md-4">
                   <Card

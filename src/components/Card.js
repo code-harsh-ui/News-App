@@ -6,11 +6,13 @@ export default class Card extends Component {
     let { title, description, imgUrl, newsUrl, publishedAt, author, source } = this.props
 
     return (
-      <div className='my-3'>
+      <div className='my-4'>
         <div className="card" style={{ width: "20rem", height: "33rem" }}>
-          <span className="position-absolute top-0 translate-middle badge rounded-pill bg-danger" style={{left: '60px'}}>
+          <div style={{display: 'flex', justifyContent: 'flex-end', position:'absolute', right:'0'}} > 
+          <span className="badge rounded-pill bg-danger">
             {source}
           </span>
+          </div>
           <img style={{ height: "12rem" }} src={imgUrl} className="card-img-top" alt="..." />
           <div className="card-body">
             <h5 className="card-title">{title}..</h5>
