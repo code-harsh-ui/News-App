@@ -58,7 +58,10 @@ export class NewsContainer extends Component {
     }
   ]
 
-  // To use "states" in class based component first we need to put it in "constructor" and we have to call a method named "super()"
+  // We use constructor only in class based component
+  //! We use constructor because constructor executes before render method we usually defined states in constructor so that our "states" will be ready before the render method displays the html in the webpage.
+
+  // we need to call a method named "super()" also to use this constructor
   constructor() {
     super();
     // Here we are assigning an object to this state which is  "key = newsData" which is an empty array which we'll update using "this.setState" when we get the data from "api"
@@ -76,7 +79,7 @@ export class NewsContainer extends Component {
         <div className="container my-3">
           <h1>Top Headlines</h1>
           <div className="row">
-          {/* Instead of using localArticle here we are using state variable which we defined in constructor  */}
+            {/* Instead of using localArticle here we are using state variable which we defined in constructor  */}
             {this.state.newsData.map(function (element) {
               return <div key={element.url} className="col-md-4">
                 <Card
