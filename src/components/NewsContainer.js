@@ -24,7 +24,6 @@ export class NewsContainer extends Component {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
-  // Here we are passing props to the constructor and super because we need to use props in document.title
   constructor(props) {
     super(props);
     this.state = {
@@ -37,9 +36,9 @@ export class NewsContainer extends Component {
   }
 
   async componentDidMount() {
-    //! Here we are calling the function "setProgress" which the help of props "progressProp" which we passed in NewsContainer component from App.js file to this file
     this.props.progressProp(30)
-    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=cfe6186e249941bab158966357415194&page=${this.state.page}&pageSize=${this.props.pageSize}`
+    //! Here the apiKey we are fetching from App.js file as a prop to hide the 'apiKey
+    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apiKey}&page=${this.state.page}&pageSize=${this.props.pageSize}`
     this.setState({ loading: true })
     let data = await fetch(url)
     let parsedData = await data.json()
@@ -50,14 +49,15 @@ export class NewsContainer extends Component {
         totalResults: parsedData.totalResults,
         loading: false
       }
-    )
-    this.props.progressProp(100)
-
-  }
-
-
-  fetchMoreData = async () => {
-    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=cfe6186e249941bab158966357415194&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`
+      )
+      this.props.progressProp(100)
+      
+    }
+    
+    
+    fetchMoreData = async () => {
+      //! Here the apiKey we are fetching from App.js file as a prop to hide the 'apiKey
+      let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apiKey}&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`
     let data = await fetch(url)
     let parsedData = await data.json()
     this.setState(
