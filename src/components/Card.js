@@ -1,9 +1,12 @@
-import React, { Component } from 'react'
+// Similarly we also need to remove {Component} from import
+import React from 'react'
 
-export default class Card extends Component {
-  render() {
+// Similarly we are changing this class based component into function based component
+// As we know this is fucntion based component that is why we need to pass props in this function parameter to get the props from NewsContainer.js file
+function Card (props) {
 
-    let { title, description, imgUrl, newsUrl, publishedAt, author, source } = this.props
+   // In function based component "this" keyword is not required for props
+    let { title, description, imgUrl, newsUrl, publishedAt, author, source } = props
 
     return (
       <div className='my-4'>
@@ -24,5 +27,6 @@ export default class Card extends Component {
         </div>
       </div>
     )
-  }
 }
+
+export default Card

@@ -1,5 +1,6 @@
 import './App.css';
-import React, { Component } from 'react'
+// Removing the "component" hook because now we are using function based component
+import React, { useState } from 'react'
 import NavBar from './components/NavBar';
 import NewsContainer from './components/NewsContainer';
 
@@ -12,60 +13,57 @@ import {
 
 import LoadingBar from 'react-top-loading-bar'
 
-export default class App extends Component { 
+// Now we have converted this file into function based component
 
-  //! Here we take a variable named "apiKey" which we are sending through the "NewsContainer" component as a prop to NewsContainer.js file and the api key we placed in env.local. file
+function App (props) { 
+ const apiKey = process.env.REACT_APP_NEWS_API 
 
-  apiKey = process.env.REACT_APP_NEWS_API // this is how we can access env.local. file
+ // Here we have removed the function called setProgres now we are using useState to set initial state of progresState
+ const [progressState, setProgessState] = useState(0)
 
-  state = { progressState: 0 }
-  setProgress = (progressPara) => {
-    this.setState({ progressState: progressPara })
 
-  }
-
-  render() {
     return (
       <>
         <Router>
           <NavBar />
           <LoadingBar
             color='#f11946' // string
-            progress={this.state.progressState} // number
+            progress={progressState} // number
             height={7} // number
           />
           <Routes>
             <Route path="/"
-            //! Here we are sending the props name "apiKey" from each Newscontainer component to the NewsContainer.js file component
-              element={<NewsContainer progressProp={this.setProgress} apiKey = {this.apiKey} key='general' category='general' />}
+              element={<NewsContainer progressProp={setProgessState} apiKey = {apiKey} key='general' category='general' />}
             />
             <Route path="/business"
-              element={<NewsContainer progressProp={this.setProgress} apiKey = {this.apiKey} key='business' category='business' />}
+              element={<NewsContainer progressProp={setProgessState} apiKey = {apiKey} key='business' category='business' />}
             />
             <Route path="/entertainment"
-              element={<NewsContainer progressProp={this.setProgress} apiKey = {this.apiKey} key='entertainment' category='entertainment' />}
+              element={<NewsContainer progressProp={setProgessState} apiKey = {apiKey} key='entertainment' category='entertainment' />}
             />
             <Route path="/general"
-              element={<NewsContainer progressProp={this.setProgress} apiKey = {this.apiKey} key='general' category='general' />}
+              element={<NewsContainer progressProp={setProgessState} apiKey = {apiKey} key='general' category='general' />}
             />
             <Route path="/health"
-              element={<NewsContainer progressProp={this.setProgress} apiKey = {this.apiKey} key='health' category='health' />}
+              element={<NewsContainer progressProp={setProgessState} apiKey = {apiKey} key='health' category='health' />}
             />
             <Route path="/science"
-              element={<NewsContainer progressProp={this.setProgress} apiKey = {this.apiKey} key='science' category='science' />}
+              element={<NewsContainer progressProp={setProgessState} apiKey = {apiKey} key='science' category='science' />}
             />
             <Route path="/sports"
-              element={<NewsContainer progressProp={this.setProgress} key='sports' category='sports' />}
+              element={<NewsContainer progressProp={setProgessState} apiKey = {apiKey} key='sports' category='sports' />}
             />
             <Route path="/technology"
-              element={<NewsContainer progressProp={this.setProgress} key='technology' category='technology' />}
+              element={<NewsContainer progressProp={setProgessState} apiKey = {apiKey} key='technology' category='technology' />}
             />
           </Routes>
         </Router>
       </>
     )
-  }
+ 
 }
+
+export default App
 
 
 

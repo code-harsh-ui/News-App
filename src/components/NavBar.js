@@ -1,10 +1,11 @@
-import React, { Component } from 'react'
+// we also need to remove "{component} from import to get rid of the error because it is only for class based component"
+import React from 'react'
 
 import { Link } from 'react-router-dom'
 
+// Changing class based component into "function based component" by converting "class extends" to "function NavBar(){}" and we also remove render method because it is not required in function based component
 
-export class NavBar extends Component {
-    render() {
+function NavBar (){
         return (
             <>
                 <nav style={{width:'100%', zIndex: '1'}} className="navbar navbar-expand-lg bg-light position-fixed">
@@ -47,7 +48,7 @@ export class NavBar extends Component {
 
             </>
         )
-    }
+   
 }
 
 export default NavBar
